@@ -1,0 +1,384 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthDto {
+  accessTokenExpiredDate: DateTime
+  access_token: String
+  auth: String
+  city: String
+  confirmed: String
+  country: String
+  department: String
+  displayName: String!
+  email: String!
+  faculty: FacultyDto
+  firstaccess: Int
+  fullname: String!
+  id: Int
+  isDefault: Boolean!
+  isFirstTimeLogin: Boolean
+  lang: String
+  lastAccess: DateTime
+  lastaccess: Int
+  lecturer: LecturerDto
+  mailformat: String
+  password: String
+  preferences: [UserPreference!]!
+  profileimageurl: String
+  profileimageurlsmall: String
+  refreshTokenExpiredDate: DateTime
+  refresh_token: String
+  role: Role!
+  suspended: String
+  theme: String
+  timezone: String
+  token: String
+  user: UserDto!
+  user_id: String!
+  username: String
+}
+
+type Class {
+  class_id: String!
+  class_type: String!
+  display_name: String!
+  lecturer: Lecturer!
+  participating_student: Int!
+  points(class_id: String, class_type: String, criteria_id: String, faculty_id: String, keyword: String = "", lecturer_id: String, program: String, semester_id: String, subjects: [String!]): [GroupedPoint!]!
+  program: String!
+  semester: Semester!
+  subject: Subject!
+  total_student: Int!
+}
+
+type Comment {
+  class: Class
+  comment_id: String!
+  display_name: String!
+  type: String!
+}
+
+type CommentQuantity {
+  quantity: Int!
+  type: String!
+}
+
+input CreateUserDto {
+  displayName: String = ""
+  facultyId: String
+  lecturerId: String
+  password: String!
+  role: Role!
+  username: String!
+}
+
+type Criteria {
+  criteria_id: String!
+  display_name: String!
+  index: Int
+  semester: [Semester!]!
+  type: [CriteriaProperty!]!
+}
+
+type CriteriaProperty {
+  class_type: String!
+  num: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Faculty {
+  display_name: String!
+  faculty_id: String!
+  full_name: String
+  is_displayed: Boolean
+  lecturers(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedLecturer
+  points(class_id: String, class_type: String, criteria_id: String, faculty_id: String, keyword: String = "", lecturer_id: String, program: String, semester_id: String, subjects: [String!]): PaginatedGroupedPoint
+  subjects(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedSubject
+  total_point(class_id: String, class_type: String, criteria_id: String, faculty_id: String, keyword: String = "", lecturer_id: String, program: String, semester_id: String, subjects: [String!]): GroupedPoint
+}
+
+type FacultyDto {
+  display_name: String!
+  faculty_id: String!
+  full_name: String
+  is_displayed: Boolean
+  points: PaginatedGroupedPoint
+  total_point: GroupedPoint
+}
+
+input FilterArgs {
+  class_id: String
+  class_type: String
+  criteria_id: String
+  faculty_id: String
+  keyword: String = ""
+  lecturer_id: String
+  program: String
+  semester_id: String
+  subjects: [String!]
+}
+
+type GroupedPoint {
+  average_point: Float!
+  class_num: Int!
+  display_name: String
+  id: String!
+  max_point: Float
+  point: Float
+}
+
+type Lecturer {
+  birth_date: DateTime
+  classes(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedClass!
+  display_name: String
+  email: String
+  faculty: Faculty!
+  faculty_id: String
+  gender: Boolean
+  learning: String
+  learning_position: String
+  lecturer_id: String!
+  mscb: Int
+  ngach: String
+  phone: String
+  points(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): [GroupedPoint!]!
+  position: String
+  total_point: Float
+  username: String
+}
+
+type LecturerDto {
+  birth_date: DateTime
+  display_name: String
+  email: String
+  faculty: FacultyDto
+  faculty_id: String
+  gender: Boolean
+  learning: String
+  learning_position: String
+  lecturer_id: String!
+  mscb: String
+  ngach: String
+  phone: String
+  position: String
+  total_point: Float
+  username: String
+}
+
+type Mutation {
+  login(password: String!, username: String!): AuthDto!
+  refreshToken: AuthDto!
+  registerUser(user: CreateUserDto!): UserDto!
+  removeUser(id: String!): Boolean!
+  updateUser(user: UpdateUserDto!): UserDto!
+}
+
+type PaginatedClass {
+  data: [Class!]!
+  meta: PaginatedMetaData!
+}
+
+type PaginatedComment {
+  data: [Comment!]!
+  meta: PaginatedMetaData!
+}
+
+type PaginatedCriteria {
+  data: [Criteria!]!
+  meta: PaginatedMetaData!
+}
+
+type PaginatedFaculty {
+  data: [Faculty!]!
+  meta: PaginatedMetaData!
+}
+
+type PaginatedGroupedPoint {
+  data: [GroupedPoint!]!
+  meta: PaginatedMetaData!
+}
+
+type PaginatedLecturer {
+  data: [Lecturer!]!
+  meta: PaginatedMetaData!
+}
+
+type PaginatedMetaData {
+  hasNext: Boolean!
+  hasPrev: Boolean!
+  page: Int!
+  size: Int!
+  total_item: Int!
+  total_page: Int!
+}
+
+type PaginatedSubject {
+  data: [Subject!]!
+  meta: PaginatedMetaData!
+}
+
+input PaginationArgs {
+  page: Int = 0
+  size: Int = 10
+}
+
+type Program {
+  program: String!
+}
+
+type Query {
+  """View particular class information"""
+  class(id: String!): Class
+
+  """List all classes"""
+  classes(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedClass!
+
+  """View particular comment information"""
+  comment(id: String!): Comment
+  commentQuantity(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}, type: String): CommentQuantity!
+
+  """List all comments"""
+  comments(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}, type: String): PaginatedComment!
+  criteria(id: String!): Criteria
+  criterias(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedCriteria!
+  currentUser: UserEntity!
+
+  """List all faculty available"""
+  faculties(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedFaculty!
+
+  """Get detail information of a faculty and its lecturer list"""
+  faculty(id: String!): Faculty
+
+  """List all points, group by a specific entity"""
+  groupedPoints(class_id: String, class_type: String, criteria_id: String, faculty_id: String, groupEntity: String = "Subject", keyword: String = "", lecturer_id: String, page: Int = 0, program: String, semester_id: String, size: Int = 10, subjects: [String!]): PaginatedGroupedPoint!
+
+  """View detail information of a specific lecturer"""
+  lecturer(id: String!): Lecturer
+
+  """List all lecturer"""
+  lecturers(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedLecturer!
+  profile: UserDto!
+  programs: [Program!]!
+
+  """List all semester"""
+  semesters: [Semester!]
+  subject(id: String!): Subject
+  subjects(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): PaginatedSubject!
+  users(name: String): [UserDto!]!
+}
+
+enum Role {
+  ADMIN
+  FACULTY
+  FULL_ACCESS
+  LECTURER
+}
+
+type Semester {
+  display_name: String!
+  semester_id: String!
+  type: String
+  year: String
+}
+
+input SortArgs {
+  isAscending: Boolean = true
+  sortField: SortFieldArgs = {}
+}
+
+input SortFieldArgs {
+  name: String
+  type: String! = "name"
+}
+
+type Subject {
+  display_name: String
+  faculty: Faculty
+  faculty_id: String
+  points(filter: FilterArgs = {}, pagination: PaginationArgs = {page: 0, size: 10}, sort: SortArgs = {}): [GroupedPoint!]
+  subject_id: String!
+  total_point: Float
+}
+
+input UpdateUserDto {
+  displayName: String = ""
+  facultyId: String
+  lastAccess: DateTime
+  lecturerId: String
+  password: String
+  role: Role
+  user_id: String!
+  username: String
+}
+
+type UserDto {
+  auth: String
+  city: String
+  confirmed: String
+  country: String
+  department: String
+  displayName: String!
+  email: String!
+  faculty: FacultyDto
+  firstaccess: Int
+  fullname: String!
+  id: Int
+  isDefault: Boolean!
+  lang: String
+  lastAccess: DateTime
+  lastaccess: Int
+  lecturer: LecturerDto
+  mailformat: String
+  password: String
+  preferences: [UserPreference!]!
+  profileimageurl: String
+  profileimageurlsmall: String
+  role: Role!
+  suspended: String
+  theme: String
+  timezone: String
+  token: String
+  user_id: String!
+  username: String
+}
+
+type UserEntity {
+  auth: String
+  city: String
+  confirmed: String
+  country: String
+  department: String
+  displayName: String!
+  email: String
+  faculty: FacultyDto
+  firstaccess: Int
+  fullname: String
+  id: Int
+  isDefault: Boolean!
+  lang: String
+  lastAccess: DateTime
+  lastaccess: Int
+  lecturer: LecturerDto
+  mailformat: String
+  password: String
+  preferences: [UserPreference!]!
+  profileimageurl: String
+  profileimageurlsmall: String
+  role: Role!
+  suspended: String
+  theme: String
+  timezone: String
+  token: String
+  user_id: String!
+  username: String
+}
+
+type UserPreference {
+  name: String!
+  value: String!
+}
